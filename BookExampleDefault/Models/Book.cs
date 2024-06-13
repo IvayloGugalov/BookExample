@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace BookExampleDefault.Models;
 
 public class Book
@@ -9,8 +11,9 @@ public class Book
     public IEnumerable<string> Authors => _authors;
     public int Edition { get; set; }
     public DateOnly PublicationDate { get; set; }
+    public CultureInfo CultureInfo { get; set; }
 
-    public Book(string title, List<string> authors, string publisher, int edition, DateOnly publicationDate)
+    public Book(string title, IEnumerable<string> authors, string publisher, int edition, DateOnly publicationDate, CultureInfo cultureInfo)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(title, nameof(title));
         ArgumentException.ThrowIfNullOrWhiteSpace(publisher, nameof(publisher));
@@ -21,6 +24,7 @@ public class Book
         this.Publisher = publisher;
         this.Edition = edition;
         this.PublicationDate = publicationDate;
+        this.CultureInfo = cultureInfo;
     }
 
     private static bool IsValidAuthor(string author)
@@ -29,15 +33,15 @@ public class Book
         return true;
     }
 
-    #region Business Logic
+    #region Domain logic
     public void AppendAuthor(string author)
     {
         IsValidAuthor(author);
         this._authors.Add(author);
     }
 
-    // TODO: is Stephen King == stephen king? Implement a case-insensitive comparison.
-    public void RemoveAuthor(string author) => this._authors.Remove(author);
+    // TODO: is Stephen King == stephen king Implement a case-insensitive comparison.
+    public bool RemoveAuthor(string author) => this._authors.Remove(author);
 
     public void AuthorsToUpperCase()
     {

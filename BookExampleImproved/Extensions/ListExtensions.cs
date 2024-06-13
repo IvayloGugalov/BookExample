@@ -1,15 +1,12 @@
-namespace BookExampleDefault.Extensions;
+namespace BookExampleImproved.Extensions;
 
 public static class ListExtensions
 {
     public static bool Remove<T>(this List<T> list, Func<T, bool> selector)
     {
-        if (list.Find(selector) is int index)
-        {
-            list.RemoveAt(index);
-            return true;
-        }
-        return false;
+        if (list.Find(selector) is not int index) return false;
+        list.RemoveAt(index);
+        return true;
     }
 
     public static bool SwapWithPrevious<T>(this List<T> list, Func<T, bool> selector) =>
@@ -61,5 +58,4 @@ public static class ListExtensions
         }
         return null;
     }
-
 }
