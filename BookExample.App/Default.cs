@@ -1,23 +1,14 @@
 ﻿using System.Globalization;
-using BookExampleImproved.Models;
+using BookExampleDefault.Models;
 
 namespace BookExample.App;
 
-public static class ImprovedProgram
+public static class Default
 {
     public static void Run()
     {
-        var authors = new AuthorsList([new Author("Ivo G", CultureInfo.InvariantCulture)]);
-        // var authors = new AuthorsList([new Author("Ivo G", new CultureInfo("tr-TR"))]);
-
-        var publisher = new Publisher("Apollo");
-        var bookRelease = new BookRelease(
-            publisher,
-            new SeasonEdition(SeasonEdition.SeasonEnum.Summer, 2024),
-            new FullDate(DateOnly.FromDateTime(new DateTime(2024, 1, 1))),
-            CultureInfo.InvariantCulture);
-
-        var book = new Book("Effective C#", authors, bookRelease);
+        var authors = new List<string> { "Ivo G" };
+        var book = new Book("Effective C#", authors, "Apollo", 1, new DateOnly(2024, 1, 1), CultureInfo.InvariantCulture);
 
         while (true)
         {
@@ -91,9 +82,9 @@ public static class ImprovedProgram
                 return Console.ReadLine();
             });
 
-            book.Authors.AppendAuthor(new Author(author, CultureInfo.CurrentUICulture));
-            Console.WriteLine($"Author {author} added.");
+            book.AppendAuthor(author);
             Console.WriteLine(string.Join(", ", book.Authors));
+            Console.WriteLine($"Author {author} added.");
         }
 
         static void RemoveAuthor(Book book)
@@ -103,19 +94,16 @@ public static class ImprovedProgram
                 Console.Write("Enter the author's name to remove: ");
                 return Console.ReadLine();
             });
-            if (book.Authors.RemoveAuthor(author))
-            {
-                Console.WriteLine($"Author {author} removed.");
-                Console.WriteLine(string.Join(", ", book.Authors));
-            }
-            Console.WriteLine("No such author found!");
+            if (book.RemoveAuthor(author)) Console.WriteLine($"Author {author} removed.");
+
+            Console.WriteLine(string.Join(", ", book.Authors));
         }
 
         static void ConvertAuthorsToUpperCase(Book book)
         {
-            book.Authors.AuthorsToUppercase();
-            Console.WriteLine("All authors' names have been converted to uppercase.");
+            book.AuthorsToUpperCase();
             Console.WriteLine(string.Join(", ", book.Authors));
+            Console.WriteLine("All authors' names have been converted to uppercase.");
         }
 
         static void MoveAuthorUp(Book book)
@@ -125,7 +113,7 @@ public static class ImprovedProgram
                 Console.Write("Enter the author's name to move up: ");
                 return Console.ReadLine();
             });
-            Console.WriteLine(book.Authors.MoveAuthorUp(author)
+            Console.WriteLine(book.MoveAuthorUp(author)
                 ? $"Author {author} moved up."
                 : $"Unable to move {author} up.");
             Console.WriteLine(string.Join(", ", book.Authors));
@@ -138,7 +126,7 @@ public static class ImprovedProgram
                 Console.Write("Enter the author's name to move down: ");
                 return Console.ReadLine();
             });
-            Console.WriteLine(book.Authors.MoveAuthorDown(author)
+            Console.WriteLine(book.MoveAuthorDown(author)
                 ? $"Author {author} moved down."
                 : $"Unable to move {author} down.");
             Console.WriteLine(string.Join(", ", book.Authors));
@@ -151,7 +139,7 @@ public static class ImprovedProgram
                 Console.Write("Enter the author's name to move to the beginning: ");
                 return Console.ReadLine();
             });
-            Console.WriteLine(book.Authors.MoveAuthorToBeginning(author)
+            Console.WriteLine(book.MoveAuthorToBeginning(author)
                 ? $"Author {author} moved to the beginning."
                 : $"Unable to move {author} to the beginning.");
             Console.WriteLine(string.Join(", ", book.Authors));
@@ -164,7 +152,7 @@ public static class ImprovedProgram
                 Console.Write("Enter the author's name to move to the end: ");
                 return Console.ReadLine();
             });
-            Console.WriteLine(book.Authors.MoveAuthorToEnd(author)
+            Console.WriteLine(book.MoveAuthorToEnd(author)
                 ? $"Author {author} moved to the end."
                 : $"Unable to move {author} to the end.");
             Console.WriteLine(string.Join(", ", book.Authors));
